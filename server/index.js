@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 const User = require("./models/User.model");
+const Post = require("./models/Post.model");
 
 mongoose
   .connect(process.env.MONGODB_URL)
@@ -96,6 +97,8 @@ app.post(
         return res.status(200).json({
           message: "User Found",
           token: user.token,
+          username: user.username,
+          email: user.email,
         });
     } catch (e) {
       console.error(e);
@@ -105,6 +108,73 @@ app.post(
     }
   }
 );
+
+// app.use((req, res) => {
+//   return res.status(404).end();
+// });
+
+// client -> req -> server
+// server = req -> express (parse etc) -> middleware(authentication) -> /blog
+
+app.use(async (req, res, next) => {
+  const token = req.headers?.token;
+
+  if (!token)
+    return res.status(401).json({
+      error: "Invalid Token",
+    });
+
+  try {
+    const user = await User.findOne({ token });
+    if (!user)
+      return res.status(401).json({
+        error: "Invalid Token",
+      });
+
+    req.currentUser = user;
+  } catch (error) {
+    return res.status(500).end();
+  }
+
+  next();
+});
+
+app.get("/check-user", async (req, res, next) => {
+  return res.json(req.currentUser);
+});
+
+app.get("/blog", async (req, res, next) => {
+  const posts = await Post.find({
+    user: req.currentUser._id,
+  })
+    .select({
+      title: 1,
+      topic: 1,
+      description: 1,
+    })
+    .sort("-createdAt");
+  return res.json(posts);
+});
+
+app.post("/blog", async (req, res, next) => {
+  console.log(req.body);
+  const title = req.body?.title?.trim();
+  const description = req.body?.description?.trim();
+  const topic = req.body?.topic?.trim();
+
+  const post = new Post({
+    title,
+    description,
+    topic,
+    user: req.currentUser._id,
+  });
+
+  await post.save();
+
+  res.status(201).end();
+
+  return;
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Example app listening on port ${process.env.PORT}`);

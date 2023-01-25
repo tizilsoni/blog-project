@@ -1,14 +1,11 @@
 import Link from "next/link";
+import { Router, useRouter } from "next/router";
 import React, { useContext } from "react";
 import { GlobalContext } from "../globalState/globalState";
 
 const Navbar = () => {
-  const { state, setState } = useContext(GlobalContext);
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setState({});
-  };
+  const { state, logout } = useContext(GlobalContext);
+  const router = useRouter();
 
   return (
     <nav className="bg-white shadow dark:bg-gray-800">
@@ -45,15 +42,17 @@ const Navbar = () => {
             </Link>
           </>
         ) : (
-          <a
+          <Link
+            href="/"
             className="border-b-2 border-transparent hover:text-gray-800 dark:hover:text-gray-200 hover:border-blue-500 mx-1.5 sm:mx-6"
             onClick={(e) => {
               e.preventDefault();
               logout();
+              router.push("/");
             }}
           >
             Log-Out
-          </a>
+          </Link>
         )}
       </div>
     </nav>

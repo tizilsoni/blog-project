@@ -8,20 +8,44 @@ import React, {
 
 export const GlobalContext = createContext<any>({});
 
+interface GlobalState {
+  auth?: Boolean;
+  token?: String;
+  username?: String;
+  email?: String;
+}
+
 const GlobalProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   let data = {};
+
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
+    const state = JSON.parse(localStorage.getItem("state") || "{}");
     data = {
-      auth: !!token,
-      token,
+      ...state,
+      auth: !!state?.token,
     };
   }
 
-  const [state, setState] = useState<any>(data);
+  const [state, setState] = useState<GlobalState>(data);
+
+  function setStateWithSave(data: GlobalState) {
+    setState((prevState) => ({
+      ...prevState,
+      ...data,
+    }));
+
+    localStorage.setItem("state", JSON.stringify({ ...state, ...data }));
+  }
+
+  function logout() {
+    setState({});
+    localStorage.removeItem("state");
+  }
 
   return (
-    <GlobalContext.Provider value={{ state, setState }}>
+    <GlobalContext.Provider
+      value={{ state, setState: setStateWithSave, logout }}
+    >
       {children}
     </GlobalContext.Provider>
   );

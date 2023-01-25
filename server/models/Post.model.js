@@ -1,23 +1,24 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
-const UserSchema = new Schema(
+const PostSchema = new Schema(
   {
-    username: {
+    title: {
       type: String,
       required: true,
     },
-    email: {
+    description: {
       type: String,
       required: true,
     },
-    password: {
+    topic: {
       type: String,
       required: true,
     },
-    token: {
-      type: String,
+    user: {
+      type: Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
   },
   {
@@ -28,6 +29,6 @@ const UserSchema = new Schema(
   }
 );
 
-const User = model("User", UserSchema);
+const Post = model("Post", PostSchema);
 
-module.exports = User;
+module.exports = Post;

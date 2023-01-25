@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { GlobalContext } from "../globalState/globalState";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -8,6 +10,9 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
+  const { state, setState } = useContext(GlobalContext);
+  const router = useRouter();
 
   const handleFormDataChange = (e: any) => {
     e.preventDefault();
@@ -46,7 +51,12 @@ export default function Register() {
         password: formData.password,
       },
     })
-      .then((res) => console.log(res.data.message))
+      .then((res) => {
+        console.log(res.data.message);
+        localStorage.setItem("token", res.data.token);
+        setState({ auth: true, token: res.data.token });
+        router.push("/dashboard");
+      })
       .catch((err) => alert(err.response.data.error));
   };
 

@@ -1,1 +1,4 @@
 curl -X POST localhost:5000/register -H 'Content-Type: application/json' -d '{"username":"tizil","password":"my_password","email":"someemail@gmail.com"}'
+
+
+curl --header "token: 123" localhost:5000/check-user

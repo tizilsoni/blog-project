@@ -40,10 +40,14 @@ export default function Login() {
       },
     })
       .then((res) => {
-        console.log(res.data.message);
-        localStorage.setItem("token", res.data.token);
-        setState({ auth: true, token: res.data.token });
-        router.push("/wblog");
+        console.log(res.data);
+        setState({
+          auth: true,
+          token: res.data.token,
+          username: res.data.username,
+          email: res.data.email,
+        });
+        router.push("/dashboard");
       })
       .catch((err) => alert(err.response.data.error));
   };
