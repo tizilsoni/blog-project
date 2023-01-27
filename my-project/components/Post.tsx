@@ -1,29 +1,39 @@
 import React from "react";
 import Link from "next/link";
 
-const Post = () => {
+type PostProps = {
+  topic: string;
+  title: string;
+  description: string;
+  username: string;
+  postId: string;
+};
+
+const Post = ({ topic, title, description, username, postId }: PostProps) => {
   return (
     <div className="py-10 w-2/3 mx-auto">
       <div className="flex justify-start">
-        <span className="px-2 py-1 text-xs rounded-full dark:bg-violet-400 dark:text-gray-900">
-          Label
-        </span>
-        <span className="px-2 py-1 text-xs rounded-full dark:bg-violet-400 dark:text-gray-900">
-          Flex
+        <span
+          className="px-2 py-1 text-xs rounded-full dark:bg-violet-400 dark:text-gray-900"
+          id="topic"
+        >
+          {topic}
         </span>
       </div>
 
-      <h1 className="text-3xl font-semibold">Blog Header</h1>
-      <p className="flex-1 pt-2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci quas
-        cupiditate consequatur. Vitae non incidunt cupiditate iusto fugit
-        officia placeat accusamus inventore ad veniam asperiores enim beatae
-        natus, ex atque?
+      <h1 className="text-3xl font-semibold" id="title">
+        {title}
+      </h1>
+      <p
+        className="flex-1 pt-2 text-ellipsis whitespace-nowrap overflow-hidden"
+        id="description"
+      >
+        {description}
       </p>
 
       <Link
+        href={`/post/${postId}`}
         rel="noopener noreferrer"
-        href="#"
         className="inline-flex items-center pt-2 mb-1 space-x-2 text-sm dark:text-violet-400"
       >
         <span>Read more</span>
@@ -42,7 +52,9 @@ const Post = () => {
         </svg>
       </Link>
 
-      <div className="self-center text-sm mb-1">by Random Person</div>
+      <div className="self-center text-sm mb-1" id="user">
+        {username}
+      </div>
       <div className="text-xs">x min read</div>
     </div>
   );

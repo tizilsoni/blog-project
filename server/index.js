@@ -109,6 +109,33 @@ app.post(
   }
 );
 
+app.get("/latest", async (req, res, next) => {
+  //const limit = parseInt(req.query.limit) || 5;
+
+  try {
+    const posts = await Post.find()
+      .populate("user", "username")
+      .sort("-createdAt");
+    //.limit(limit);
+    res.json(posts);
+  } catch (error) {
+    res.status(500).end();
+  }
+});
+
+app.get("/blog/:postId", async (req, res, next) => {
+  const _id = req.params.postId;
+  try {
+    await Post.findById(_id)
+      .populate("user", "username")
+      .then((post) => {
+        res.json(post);
+      });
+  } catch (error) {
+    res.status(500).end;
+  }
+});
+
 // app.use((req, res) => {
 //   return res.status(404).end();
 // });
@@ -170,7 +197,6 @@ app.post("/blog", async (req, res, next) => {
   });
 
   await post.save();
-
   res.status(201).end();
 
   return;
