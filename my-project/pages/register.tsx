@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { GlobalContext } from "../globalState/globalState";
+import Footer from "../components/footer";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -55,14 +56,14 @@ export default function Register() {
         console.log(res.data.message);
         localStorage.setItem("token", res.data.token);
         setState({ auth: true, token: res.data.token });
-        router.push("/dashboard");
+        router.push("/wblog");
       })
       .catch((err) => alert(err.response.data.error));
   };
 
   return (
-    <div className="h-screen">
-      <div className="max-w-lg p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 mt-20">
+    <div className="h-screen overflow-hidden">
+      <div className="max-w-lg p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 mt-20 mb-60">
         <h1 className="text-xl font-bold text-white capitalize dark:text-white">
           Create Account
         </h1>
@@ -138,6 +139,7 @@ export default function Register() {
           </div>
         </form>
       </div>
+      <Footer></Footer>
     </div>
   );
 }

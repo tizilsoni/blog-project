@@ -14,7 +14,7 @@ export default function Home() {
       <Head>
         <title>Blogs-short</title>
       </Head>
-      <main className="dark:bg-gray-800 dark:text-gray-50">
+      <main className="scroll-smooth dark:bg-gray-900 dark:text-gray-50">
         <div>
           <h1 className="mb-5 text-3xl font-bold underline flex justify-center">
             Welcome to blogs short!

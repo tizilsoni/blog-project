@@ -11,8 +11,8 @@ type PostProps = {
 
 const Post = ({ topic, title, description, username, postId }: PostProps) => {
   return (
-    <div className="py-10 w-2/3 mx-auto">
-      <div className="flex justify-start">
+    <div className="px-12 py-10 w-2/3 mx-auto border-solid border-2 border-indigo-400 rounded-lg">
+      <div className="flex justify-start ">
         <span
           className="px-2 py-1 text-xs rounded-full dark:bg-violet-400 dark:text-gray-900"
           id="topic"
@@ -52,10 +52,10 @@ const Post = ({ topic, title, description, username, postId }: PostProps) => {
         </svg>
       </Link>
 
-      <div className="self-center text-sm mb-1" id="user">
-        {username}
+      <div className="text-end text-sm mb-1" id="user">
+        --{username}
       </div>
-      <div className="text-xs">x min read</div>
+      <div className="text-xs text-end">x min read</div>
     </div>
   );
 };

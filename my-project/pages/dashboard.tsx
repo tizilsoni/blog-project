@@ -16,11 +16,7 @@ export default function Dashboard() {
     console.log(state);
 
     tokenAxiosInstance(state.token)
-      .get("/blog", {
-        headers: {
-          token: state?.token,
-        },
-      })
+      .get("/blog")
       .then((res) => {
         setPost(res.data);
       })
@@ -39,45 +35,59 @@ export default function Dashboard() {
       >
         Welcome {state?.username || "User"}
       </h1>
-      <div className="ml-4 grid grid-cols-2 gap-10">
+      <div className="container mx-auto grid grid-cols-2 gap-10 divide-x">
         <div className="space-y-5">
           <h2 className="text-2xl font-bold flex justify-center">Your blogs</h2>
-          <ul className="ml-10 list-disc space-y-3 text-center">
-            {post.map((p) => (
-              <li key={p.title}>{p.title}</li>
-            ))}
-            <li>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Corporis, eligendi.
-            </li>
-            <li>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Aspernatur, placeat.
-            </li>
+          <ul className="list-disc space-y-3 text-start">
+            {!post.length ? (
+              <>
+                <h1 className="text-center text-xl mb-3">
+                  Wow Such Empty! Write To get Started
+                </h1>
+              </>
+            ) : (
+              <>
+                {post.map((p) => (
+                  <li className="text-xl mx-40" key={p.title}>
+                    {p.title}
+                  </li>
+                ))}
+              </>
+            )}
           </ul>
-          <Link
-            href="/wblog"
-            className="text-2xl font-bold flex justify-center"
-          >
-            Write More Blogs
-          </Link>
+          <div className="grid grid-cols-2 gap-7">
+            <Link
+              href="/wblog"
+              className="text-2xl text-center font-bold border-solid border-2 border-sky-900 rounded-full"
+            >
+              Write More Blogs
+            </Link>
+            <Link
+              href="/modify"
+              className="text-2xl text-center font-bold border-solid border-2 border-sky-900 rounded-full"
+            >
+              Edit/Modify Blogs
+            </Link>
+          </div>
         </div>
         <div className="space-y-5">
           <h2 className="text-2xl font-bold flex justify-center">
             Edit Your Info
           </h2>
-          <div className="grid grid-cols-2">
-            <div className="ml-64 space-y-4">
+          <div className="grid grid-cols-3">
+            <div className="space-y-4 text-end">
+              <h2>Username :</h2>
+              <h2>Email :</h2>
+            </div>
+            <div className="space-y-4 text-center">
               <h2>{state?.username || "Username"}</h2>
               <h2>{state?.email || "Email"}</h2>
-              <h2>Password</h2>
+              <h2>Change Password</h2>
             </div>
             <div className="space-y-4">
-              <input></input>
+              <input placeholder="New username"></input>
               <br></br>
-              <input></input>
-              <br></br>
-              <input></input>
+              <input placeholder="New Email"></input>
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import Footer from "../components/footer";
 import Loading from "../components/Loading";
 import "github-markdown-css";
 import axios from "axios";
+import { axiosInstance, tokenAxiosInstance } from "../utils/axios";
 
 const MarkdownPreview = lazy(() =>
   delayForDemo(import("../components/MarkdownPreview"))
@@ -15,7 +16,24 @@ export default function WBlog() {
   const { state } = useContext(GlobalContext);
   const router = useRouter();
   const [showPreview, setShowPreview] = useState(true);
-  const [markdown, setMarkdown] = useState("Hello, **world**!");
+
+  const {
+    query: { title, topic, description, id },
+  } = router;
+
+  const props = {
+    title,
+    topic,
+    description,
+    id,
+  };
+
+  const [temp1, uset] = useState(props.title || "Title");
+  const [temp2, usec] = useState(props.topic || "Topic");
+
+  const [markdown, setMarkdown] = useState(
+    props.description || "# Hello *world* !"
+  );
 
   useEffect(() => {
     if (!state?.auth) router.push("/");
@@ -51,24 +69,34 @@ export default function WBlog() {
       return;
     }
 
-    axios({
-      method: "POST",
-      url: "http://localhost:5000/blog",
-      headers: {
-        "Content-Type": "application/json",
-        token: state.token,
-      },
-      data: {
-        title: formData.title,
-        topic: formData.topic,
-        description: formData.description,
-      },
-    })
-      .then((res) => {
-        alert("Blog Successfully Posted");
-        router.push("/dashboard");
+    if (props.id) {
+      tokenAxiosInstance(state.token)
+        .put("http://localhost:5000/update/" + props.id, formData)
+        .then(() => {
+          console.log("Blog Successfully Updated");
+          router.push("/dashboard");
+        })
+        .catch((err) => console.error(err));
+    } else {
+      axios({
+        method: "POST",
+        url: "http://localhost:5000/blog",
+        headers: {
+          "Content-Type": "application/json",
+          token: state.token,
+        },
+        data: {
+          title: formData.title,
+          topic: formData.topic,
+          description: formData.description,
+        },
       })
-      .catch((err) => alert("Not Possible"));
+        .then((res) => {
+          alert("Blog Successfully Posted");
+          router.push("/dashboard");
+        })
+        .catch((err) => alert("Not Possible"));
+    }
   };
 
   return (
@@ -92,9 +120,13 @@ export default function WBlog() {
         <input
           id="title"
           name="title"
+          placeholder="Title"
           className="block w-1/3 px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
           type="text"
-          onChange={handleFormDataChange}
+          value={temp1}
+          onChange={(e) => {
+            uset(e.target.value), handleFormDataChange(e);
+          }}
         ></input>
 
         <h2 className="text-3xl flex justify-start">
@@ -103,9 +135,13 @@ export default function WBlog() {
         <input
           id="topic"
           name="topic"
+          placeholder="topic"
           className="block w-1/3 px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
           type="text"
-          onChange={handleFormDataChange}
+          value={temp2}
+          onChange={(e) => {
+            usec(e.target.value), handleFormDataChange(e);
+          }}
         ></input>
 
         <h2 className="text-3xl flex justify-center">Lets write!</h2>
@@ -119,9 +155,16 @@ export default function WBlog() {
           }}
         ></textarea>
 
+        <a
+          href="https://www.markdownguide.org/basic-syntax/"
+          className="flex justify-end text-blue-700"
+        >
+          How To Write In Markdown?
+        </a>
+
         {showPreview && (
           <Suspense fallback={<Loading />}>
-            <h2>Preview</h2>
+            <h2 className="text-green-500 text-2xl">Preview:</h2>
             <div className="markdown-body">
               <MarkdownPreview markdown={markdown} />
             </div>

@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react";
 import { GlobalContext } from "../globalState/globalState";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Footer from "../components/footer";
 
 export default function Login() {
   const { state, setState } = useContext(GlobalContext);
@@ -47,14 +48,16 @@ export default function Login() {
           username: res.data.username,
           email: res.data.email,
         });
-        router.push("/dashboard");
+        setTimeout(() => {
+          router.push("/dashboard"), 2000;
+        });
       })
-      .catch((err) => alert(err.response.data.error));
+      .catch((err) => alert("Invalid Credentials"));
   };
 
   return (
-    <div className="h-screen">
-      <div className="max-w-lg p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
+    <div className="h-full">
+      <div className="max-w-lg p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20 mb-96">
         <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">
           Welcome Back :)
         </h2>
@@ -116,6 +119,7 @@ export default function Login() {
           </div>
         </form>
       </div>
+      <Footer></Footer>
     </div>
   );
 }

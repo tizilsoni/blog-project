@@ -1,14 +1,49 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useRef, useState } from "react";
+import { axiosInstance } from "../utils/axios";
 
 const Footer = () => {
+  const clickPoint = useRef();
+
+  const handleFocus = () => {
+    clickPoint.current.style.display = "none";
+  };
+
+  const handleBlur = () => {
+    clickPoint.current.style.display = "block";
+  };
   return (
-    <div className="flex justify-center bg-slate-500">
+    <div className="flex justify-center bg-white shadow dark:bg-indigo-900">
       <footer className="footer footer-center p-10 bg-base-200 text-base-content rounded">
         <div className="grid grid-flow-col space-x-10">
           <a className="link link-hover">About us</a>
           <a className="link link-hover">Contact</a>
           <a className="link link-hover">Advertisment</a>
-          <a className="link link-hover">Find Blog</a>
+          <div className="relative mr-3">
+            <div className="absolute top-3 left-3 items-end" ref={clickPoint}>
+              <svg
+                className="w-5 h-5 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="find"
+              className="block p-2 pl-10 w-70 text-white bg-blue-800 rounded-lg border border-gray-300 focus:pl-3"
+              placeholder="Search Blogs..."
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </div>
+          <button>Search</button>
         </div>
         <div>
           <div className="ml-10 mt-6 grid grid-flow-col">

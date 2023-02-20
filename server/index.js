@@ -123,6 +123,8 @@ app.get("/latest", async (req, res, next) => {
   }
 });
 
+//getting post
+
 app.get("/blog/:postId", async (req, res, next) => {
   const _id = req.params.postId;
   try {
@@ -132,7 +134,19 @@ app.get("/blog/:postId", async (req, res, next) => {
         res.json(post);
       });
   } catch (error) {
-    res.status(500).end;
+    res.status(500).end();
+  }
+});
+
+//deleting post
+
+app.delete("/del/:postId", async (req, res, next) => {
+  const _id = req.params.postId;
+  try {
+    await Post.findByIdAndRemove(_id);
+    res.end();
+  } catch (error) {
+    res.status(404).end();
   }
 });
 
@@ -183,6 +197,30 @@ app.get("/blog", async (req, res, next) => {
   return res.json(posts);
 });
 
+// Updating Posts
+app.put("/update/:postId", async (req, res, next) => {
+  const _id = req.params.postId;
+  const title = req.body?.title?.trim();
+  const description = req.body?.description?.trim();
+  const topic = req.body?.topic?.trim();
+  try {
+    await Post.updateOne(
+      { _id },
+      {
+        $set: {
+          title,
+          description,
+          topic,
+        },
+      }
+    );
+    res.status(200).end();
+  } catch (error) {
+    res.status(404).end();
+  }
+});
+
+// Creating Posts
 app.post("/blog", async (req, res, next) => {
   console.log(req.body);
   const title = req.body?.title?.trim();

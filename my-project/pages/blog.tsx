@@ -34,7 +34,7 @@ const Blog = () => {
 
   return (
     <div className="dark:bg-gray-800 dark:text-gray-50">
-      <div className="container mx-auto dark:bg-gray-900">
+      <div className="mx-auto dark:bg-gray-900 space-y-5">
         {data.map((post, index) => (
           <Post
             topic={post.topic}
