@@ -7,9 +7,20 @@ type PostProps = {
   description: string;
   username: string;
   postId: string;
+  loading: boolean;
 };
 
-const Post = ({ topic, title, description, username, postId }: PostProps) => {
+const Post = ({
+  topic,
+  title,
+  description,
+  username,
+  postId,
+  loading,
+}: PostProps) => {
+  if (loading) {
+    return <h2 className="text-3xl">Loading...</h2>;
+  }
   return (
     <div className="px-12 py-10 w-2/3 mx-auto border-solid border-2 border-indigo-400 rounded-lg">
       <div className="flex justify-start ">

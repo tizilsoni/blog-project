@@ -20,7 +20,10 @@ const Footer = () => {
           <a className="link link-hover">Contact</a>
           <a className="link link-hover">Advertisment</a>
           <div className="relative mr-3">
-            <div className="absolute top-3 left-3 items-end" ref={clickPoint}>
+            <div
+              className="absolute top-3 left-3 items-center"
+              ref={clickPoint}
+            >
               <svg
                 className="w-5 h-5 text-white"
                 fill="currentColor"
@@ -45,8 +48,8 @@ const Footer = () => {
           </div>
           <button>Search</button>
         </div>
-        <div>
-          <div className="ml-10 mt-6 grid grid-flow-col">
+        <div className="flex justify-center">
+          <div className="mt-6 grid grid-flow-col gap-10">
             <a>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,6 +85,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
+        <h1 className="text-center mt-10">Made with ❤️ and NextJS</h1>
       </footer>
     </div>
   );
